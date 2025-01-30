@@ -9,19 +9,33 @@ import { RotatingLines } from "react-loader-spinner";
 
 const AlumniDetails = () => {
 
- 
+
   const temp = useParams();
   const [data, setData] = useState();
 
-  const url = `https://script.google.com/macros/s/AKfycbzqlAHwB05PNbo48zNQXPHsfa50ajxRbs5bq8dGWeoqZSNEWL0tLWbDuKWz5Uy7V4ag/exec?year=${temp.year}`;
+  const url = `https://script.google.com/macros/s/AKfycby6k_7jCqHzy6fcmZ_Svsttql1j_4s6YTmGO-gYaKOAmR6oWYuTJCXhR-dwVGx8CKh2/exec?year=${temp.year}`;
   async function getData() {
-    var fdata = await fetch(url);
-    fdata = await fdata.json();
-    setData(fdata.data);
+    try {
+      console.log("Fetching URL: ", url);  // Log the URL
+      let fdata = await fetch(url);
+      if (!fdata.ok) {
+        throw new Error("Network response was not ok");
+      }
+      fdata = await fdata.json();
+      console.log("Fetched data: ", fdata);  // Log the fetched data
+      setData(fdata.data);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      setData([]);  // Set data to empty array or show error message
+    }
   }
+  
   useEffect(() => {
+    console.log("Fetching data for year:", temp.year); // Log the year
     getData();
-  }, []);
+  }, [temp.year]);
+  
+  
 
   return (
     <div className="AlumniContainer">
@@ -50,19 +64,17 @@ const AlumniDetails = () => {
               </tr>
             </thead>
             <tbody>
-              {!data.length ? (
+              {!data || !data.length ? (
                 "No data found"
               ) : (
-                data.map((item, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>{item.Name}</td>
-                      <td>{item.Role}</td>
-                      <td>{item.Department}</td>
-                      <td>{item.Year}</td>
-                    </tr>
-                  );
-                })
+                data.map((item, i) => (
+                  <tr key={i}>
+                    <td>{item.Name}</td>
+                    <td>{item.Role}</td>
+                    <td>{item.Department}</td>
+                    <td>{item.Year}</td>
+                  </tr>
+                ))
               )}
             </tbody>
           </Table>

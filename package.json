@@ -22,7 +22,7 @@
     "react-redux": "^8.1.2",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-simple-image-slider": "^2.4.1",
     "react-visibility-sensor": "^5.1.1",
     "web-vitals": "^2.1.4"
